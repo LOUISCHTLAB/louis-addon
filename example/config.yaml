@@ -29,3 +29,5 @@ schema:
   api_key: "str?"
   ota_key: "str?"
 image: "ghcr.io/home-assistant/{arch}-addon-example"
+panel_icon: "mdi:home-assistant"
+panel_title: "Louis Addon"
