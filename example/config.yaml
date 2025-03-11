@@ -19,7 +19,7 @@ map:
   - share:rw
   - media:rw
 options:
-  message: "Hello world..."
+  message: ""
 schema:
   message: "str?"
 image: "ghcr.io/home-assistant/{arch}-addon-example"
