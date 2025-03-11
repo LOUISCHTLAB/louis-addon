@@ -20,6 +20,12 @@ map:
   - media:rw
 options:
   message: ""
+  secret_key: ""
+  api_key: ""
+  ota_key: ""
 schema:
   message: "str?"
+  secret_key: "str?"
+  api_key: "str?"
+  ota_key: "str?"
 image: "ghcr.io/home-assistant/{arch}-addon-example"
