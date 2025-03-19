@@ -8,13 +8,22 @@ profile esphome_log_viewer flags=(attach_disconnected,mediate_deleted) {
 
   # Python and script execution
   /usr/bin/python3 rix,
-  /tmp/** rwk,
+  /tmp/** rwkix,
 
   # Access to configuration and logs
   /data/** rw,
   /share/** rw,
 
-  # S6-Overlay
-  /run/{s6,s6-rc*,service}/** ix,
+  # S6-Overlay (full access to ensure /init works)
+  /init rix,
+  /bin/** rix,
+  /usr/bin/** rix,
+  /run/{s6,s6-rc*,service}/** rwkix,
   /etc/services.d/** rwix,
+  /etc/cont-init.d/** rwix,
+  /etc/cont-finish.d/** rwix,
+  /run/** rwk,
+
+  # Device access
+  /dev/tty rw,
 }

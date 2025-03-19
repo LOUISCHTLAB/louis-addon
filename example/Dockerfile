@@ -13,8 +13,9 @@ RUN \
 RUN apk add --no-cache python3 py3-pip \
     && pip3 install aioesphomeapi
 
-# Copy root filesystem
+# Copy root filesystem and set executable permissions
 COPY rootfs /
+RUN chmod -R +x /etc/services.d /etc/cont-init.d /etc/cont-finish.d /run.sh
 
 # Run the add-on entrypoint
 CMD ["/run.sh"]
