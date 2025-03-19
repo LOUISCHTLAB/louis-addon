@@ -1,10 +1,7 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Start the example service
-# s6-overlay docs: https://github.com/just-containers/s6-overlay
+# Run the ESPHome log viewer service
 # ==============================================================================
-
-# Add your code here
 
 # Declare variables
 declare device_ip
@@ -24,48 +21,13 @@ if [ -z "$device_ip" ] || [ -z "$port" ]; then
   exit 1
 fi
 
-# Install Python dependencies if not already installed (handled in Dockerfile)
-# Use aioesphomeapi to connect and fetch logs
-
 bashio::log.info "Connecting to ESPHome device at ${device_ip}:${port}..."
 
-# Example Python script to connect and display logs
-cat << 'EOF' > /tmp/esphome_log.py
-import asyncio
-import aioesphomeapi
-from aioesphomeapi import APIClient, APIConnectionError
+# Export variables to environment for Python
+export DEVICE_IP="${device_ip}"
+export PASSWORD="${password}"
+export ENCRYPTION_KEY="${encryption_key}"
+export PORT="${port}"
 
-async def connect_and_log():
-    try:
-        # Create API client
-        client = APIClient(
-            host="${device_ip}",
-            port=${port},
-            password="${password}" if "${password}" else None,
-            encryption_key="${encryption_key}" if "${encryption_key}" else None
-        )
-        await client.connect(login=True)
-        bashio::log.info "Connected to ESPHome device successfully!"
-
-        # Subscribe to logs
-        async for log in client.subscribe_logs():
-            bashio::log.info log.message
-
-    except APIConnectionError as e:
-        bashio::log.error "Failed to connect: ${e}"
-    except Exception as e:
-        bashio::log.error "An error occurred: ${e}"
-    finally:
-        await client.disconnect()
-
-# Run the async function
-asyncio.run(connect_and_log())
-EOF
-
-# Make the script executable and run it
-chmod +x /tmp/esphome_log.py
-python3 /tmp/esphome_log.py
-
-
-## Run your program
-exec /usr/bin/my_program
+# Execute the Python script with environment variables
+exec python3 /tmp/esphome_log.py
