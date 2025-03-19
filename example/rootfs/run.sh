@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bashio
 # ==============================================================================
-# Entry point to start the S6 supervision tree
+# Run ESPHome log viewer directly
 # ==============================================================================
 
 bashio::log.info "Starting ESPHome Log Viewer add-on..."
-exec /init
+exec python3 /tmp/esphome_log.py

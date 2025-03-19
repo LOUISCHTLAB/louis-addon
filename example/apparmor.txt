@@ -14,7 +14,8 @@ profile esphome_log_viewer flags=(attach_disconnected,mediate_deleted) {
   /data/** rw,
   /share/** rw,
 
-  # S6-Overlay (full access to ensure /init works)
+  # S6-Overlay (full access to ensure /etc/s6/init/init-stage1 works)
+  /etc/s6/init/** rwkix,
   /init rix,
   /bin/** rix,
   /usr/bin/** rix,
