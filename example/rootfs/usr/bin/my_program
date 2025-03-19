@@ -1,3 +1,18 @@
 #!/bin/bash
+# Declare variables
+declare message
+declare secret_key
+declare api_key
+declare ota_key
+## Get the 'message', 'secret_key', 'api_key', and 'ota_key' keys from the user config options.
+message=$(bashio::config 'message')
+secret_key=$(bashio::config 'secret_key')
+api_key=$(bashio::config 'api_key')
+ota_key=$(bashio::config 'ota_key')
 
+## Print the message, secret_key, api_key, and ota_key the user supplied
+bashio::log.info "Message: ${message:="Input your message in the add-on configuration."}"
+bashio::log.info "Secret Key: ${secret_key:="Input your secret key in the add-on configuration."}"
+bashio::log.info "API Key: ${api_key:="Input your API key in the add-on configuration."}"
+bashio::log.info "OTA Key: ${ota_key:="Input your OTA key in the add-on configuration."}"
 echo "Task completed!" 

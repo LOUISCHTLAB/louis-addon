@@ -10,4 +10,4 @@ labels:
   org.opencontainers.image.description: "Example add-on of Louis"
   org.opencontainers.image.source: "https://github.com/LOUISCHTLAB/louis-addon.git"
 args:
-  TEMPIO_VERSION: "2025.3.11"
+  TEMPIO_VERSION: "2021.09.0"

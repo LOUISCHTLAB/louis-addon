@@ -7,21 +7,65 @@
 # Add your code here
 
 # Declare variables
-declare message
-declare secret_key
-declare api_key
-declare ota_key
-## Get the 'message', 'secret_key', 'api_key', and 'ota_key' keys from the user config options.
-message=$(bashio::config 'message')
-secret_key=$(bashio::config 'secret_key')
-api_key=$(bashio::config 'api_key')
-ota_key=$(bashio::config 'ota_key')
+declare device_ip
+declare password
+declare encryption_key
+declare port
 
-## Print the message, secret_key, api_key, and ota_key the user supplied
-bashio::log.info "Message: ${message:="Input your message in the add-on configuration."}"
-bashio::log.info "Secret Key: ${secret_key:="Input your secret key in the add-on configuration."}"
-bashio::log.info "API Key: ${api_key:="Input your API key in the add-on configuration."}"
-bashio::log.info "OTA Key: ${ota_key:="Input your OTA key in the add-on configuration."}"
+# Get configuration values
+device_ip=$(bashio::config 'device_ip')
+password=$(bashio::config 'password')
+encryption_key=$(bashio::config 'encryption_key')
+port=$(bashio::config 'port')
+
+# Check if required fields are provided
+if [ -z "$device_ip" ] || [ -z "$port" ]; then
+  bashio::log.error "Device IP and port are required!"
+  exit 1
+fi
+
+# Install Python dependencies if not already installed (handled in Dockerfile)
+# Use aioesphomeapi to connect and fetch logs
+
+bashio::log.info "Connecting to ESPHome device at ${device_ip}:${port}..."
+
+# Example Python script to connect and display logs
+cat << 'EOF' > /tmp/esphome_log.py
+import asyncio
+import aioesphomeapi
+from aioesphomeapi import APIClient, APIConnectionError
+
+async def connect_and_log():
+    try:
+        # Create API client
+        client = APIClient(
+            host="${device_ip}",
+            port=${port},
+            password="${password}" if "${password}" else None,
+            encryption_key="${encryption_key}" if "${encryption_key}" else None
+        )
+        await client.connect(login=True)
+        bashio::log.info "Connected to ESPHome device successfully!"
+
+        # Subscribe to logs
+        async for log in client.subscribe_logs():
+            bashio::log.info log.message
+
+    except APIConnectionError as e:
+        bashio::log.error "Failed to connect: ${e}"
+    except Exception as e:
+        bashio::log.error "An error occurred: ${e}"
+    finally:
+        await client.disconnect()
+
+# Run the async function
+asyncio.run(connect_and_log())
+EOF
+
+# Make the script executable and run it
+chmod +x /tmp/esphome_log.py
+python3 /tmp/esphome_log.py
+
 
 ## Run your program
 exec /usr/bin/my_program

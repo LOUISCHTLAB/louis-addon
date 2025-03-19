@@ -1,33 +1,23 @@
-# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
-name: Louis addon
-version: "1.2.0"
-slug: louis-addon
-description: Example add-on
-url: "https://github.com/home-assistant/addons-example/tree/main/example"
-arch:
-  - armhf
-  - armv7
-  - aarch64
-  - amd64
-  - i386
-init: false
-map:
-  - config:rw
-  - ssl:rw
-  - addons:rw
-  - backup:rw
-  - share:rw
-  - media:rw
-options:
-  message: ""
-  secret_key: ""
-  api_key: ""
-  ota_key: ""
-schema:
-  message: "str?"
-  secret_key: "str?"
-  api_key: "str?"
-  ota_key: "str?"
-image: "ghcr.io/home-assistant/{arch}-addon-example"
-panel_icon: "mdi:home-assistant"
-panel_title: "Louis Addon"
+{
+  "name": "ESPHome Log Viewer",
+  "version": "1.0.0",
+  "slug": "esphome_log_viewer",
+  "description": "A Home Assistant add-on to connect to ESPHome devices via Native API and display logs.",
+  "url": "https://github.com/LOUISCHTLAB/louis-addon.git",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "init": false,
+  "map": ["config:rw", "ssl:rw", "share:rw"],
+  "options": {
+    "device_ip": "",
+    "password": "",
+    "encryption_key": "",
+    "port": 6053
+  },
+  "schema": {
+    "device_ip": "str",
+    "password": "str",
+    "encryption_key": "str",
+    "port": "port"
+  },
+  "image": "ghcr.io/home-assistant/{arch}-addon-example"
+}
